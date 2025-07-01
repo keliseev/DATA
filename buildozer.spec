@@ -4,7 +4,7 @@
 title = Фокус
 
 # (str) Package name
-package.name = focusmobileapp
+package.name = focusmobile
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.testopezs

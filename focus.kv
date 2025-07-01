@@ -1,0 +1,446 @@
+#:import DarkOverlay main.DarkOverlay
+#:import CircleTimer CircleTimer.CircleTimer
+#:import Line kivy.graphics.Line
+
+<CustomLabel@Label>:
+    font_name: "Roboto"
+    color: 1, 1, 1, 1
+
+<CustomButton@Button>:
+    font_name: "Roboto"
+    background_normal: ''
+    background_color: 0.2, 0.6, 0.2, 1
+    color: 1, 1, 1, 1
+
+<CustomSpinner@Spinner>:
+    font_name: "Roboto"
+
+<NavButton@Button>:
+    font_name: "Roboto"
+    background_normal: ''
+    background_color: 0.2, 0.6, 0.2, 1
+    color: 1, 1, 1, 1
+    size_hint_x: 1
+    id: nav_button
+
+<Divider@Widget>:
+    size_hint_y: None
+    height: 1
+    canvas:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 0.5
+        Line:
+            points: self.x, self.y, self.x + self.width, self.y
+
+RootWidget:
+    MeditationScreen:
+        name: "meditation"
+    SleepScreen:
+        name: "sleep"
+    ReportScreen:
+        name: "report"
+    InfoScreen:
+        name: "info"
+    AboutScreen:
+        name: "about"
+
+<MeditationScreen>:
+    FloatLayout:
+        Image:
+            source: "background.jpg"
+            fit_mode: "fill"
+            size_hint: 1,1
+            pos_hint: {'x':0, 'y':0}
+        DarkOverlay:
+        
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            spacing: dp(20)
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+            
+            CustomLabel:
+                text: "Фокус"
+                font_size: '32sp'
+                size_hint_y: None
+                height: dp(50)
+                
+            CustomLabel:
+                text: "Выбор звука:"
+                font_size: '16sp'
+                size_hint_y: None
+                height: dp(30)
+                
+            CustomSpinner:
+                id: sound_spinner
+                size_hint: (0.8, None)
+                height: dp(44)
+                pos_hint: {'center_x': 0.5}
+                text: 'Выберите звук'
+                values: []
+                background_color: (0.2, 0.6, 0.2, 1)
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+
+                CustomSpinner:
+                    id: spinner_hours
+                    text: '0'
+                    values: [str(i) for i in range(24)]
+                CustomSpinner:
+                    id: spinner_minutes
+                    text: '25'
+                    values: [str(i) for i in range(60)]
+                CustomSpinner:
+                    id: spinner_seconds
+                    text: '0'
+                    values: [str(i) for i in range(60)]
+
+            BoxLayout:
+                id: button_box
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+                
+                CustomButton:
+                    id: start_button
+                    text: "Начать фокус-сессию"
+                    size_hint_x: 0.7 if hasattr(root, 'pause_button') and root.pause_button else 1
+                    on_press: root.start_stop_session()
+
+            CircleTimer:
+                id: circle_timer
+                size_hint: 0.8, 0.8
+                pos_hint: {'center_x': 0.5}
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            pos_hint: {'x': 0, 'y': 0}
+            spacing: dp(2)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            NavButton:
+                text: "Фокус"
+                on_press: app.root.switch_to("meditation")
+            NavButton:
+                text: "Сон"
+                on_press: app.root.switch_to("sleep")
+            NavButton:
+                text: "Отчёт"
+                on_press: app.root.switch_to("report")
+            NavButton:
+                text: "Данные"
+                on_press: app.root.switch_to("info")
+            NavButton:
+                text: "Инфо"
+                on_press: app.root.switch_to("about")
+
+<SleepScreen>:
+    FloatLayout:
+        Image:
+            source: "background.jpg"
+            fit_mode: "fill"
+            size_hint: 1,1
+        DarkOverlay:
+        
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(20)
+            padding: dp(20)
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+            
+            CustomLabel:
+                text: "Сон"
+                font_size: '32sp'
+                size_hint_y: None
+                height: dp(50)
+                
+            CustomLabel:
+                text: "Выбор звука:"
+                font_size: '16sp'
+                size_hint_y: None
+                height: dp(30)
+                
+            CustomSpinner:
+                id: sound_spinner
+                size_hint: 1, None
+                height: dp(40)
+                background_color: 0.2, 0.6, 0.2, 1
+                color: 1, 1, 1, 1
+                font_name: "Roboto"
+                font_size: '20sp'
+                
+            CustomLabel:
+                text: "Длительность звука:"
+                font_size: '16sp'
+                size_hint_y: None
+                height: dp(30)
+                
+            CustomSpinner:
+                id: sound_duration_spinner
+                size_hint: 1, None
+                height: dp(40)
+                background_color: 0.2, 0.6, 0.2, 1
+                color: 1, 1, 1, 1
+                font_name: "Roboto"
+                font_size: '20sp'
+                
+            CustomLabel:
+                id: sleep_label
+                text: "Нажми начать сон"
+                font_size: "24sp"
+
+            BoxLayout:
+                id: sleep_button_box
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+                
+                CustomButton:
+                    id: sleep_button
+                    text: "Начать сон"
+                    size_hint_x: 0.7 if hasattr(root, 'pause_button') and root.pause_button else 1
+                    on_press: root.toggle_sleep()
+
+            CustomLabel:
+                id: sleep_timer_label
+                text: ""
+                font_size: "28sp"
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            pos_hint: {'x': 0, 'y': 0}
+            spacing: dp(2)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            NavButton:
+                text: "Фокус"
+                on_press: app.root.switch_to("meditation")
+            NavButton:
+                text: "Сон"
+                on_press: app.root.switch_to("sleep")
+            NavButton:
+                text: "Отчёт"
+                on_press: app.root.switch_to("report")
+            NavButton:
+                text: "Данные"
+                on_press: app.root.switch_to("info")
+            NavButton:
+                text: "Инфо"
+                on_press: app.root.switch_to("about")
+
+<ReportScreen>:
+    FloatLayout:
+        Image:
+            source: "background.jpg"
+            fit_mode: "fill"
+            size_hint: 1,1
+        DarkOverlay:
+        
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(20)
+            padding: dp(20)
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+            
+            CustomLabel:
+                text: "Отчёт"
+                font_size: '24sp'
+                size_hint_y: None
+                height: dp(40)
+                
+            BoxLayout:
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(10)
+                CustomButton:
+                    id: med_button
+                    text: "Фокус"
+                    on_press: root.on_meditation_press()
+                CustomButton:
+                    id: sleep_button
+                    text: "Сон"
+                    on_press: root.on_sleep_press()
+                    
+            CustomLabel:
+                id: stats_label
+                text: ""
+                font_size: '16sp'
+                size_hint_y: None
+                height: dp(40)
+                
+            BoxLayout:
+                id: report_container
+                orientation: 'vertical'
+                size_hint: 1, 1
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            pos_hint: {'x': 0, 'y': 0}
+            spacing: dp(2)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            NavButton:
+                text: "Фокус"
+                on_press: app.root.switch_to("meditation")
+            NavButton:
+                text: "Сон"
+                on_press: app.root.switch_to("sleep")
+            NavButton:
+                text: "Отчёт"
+                on_press: app.root.switch_to("report")
+            NavButton:
+                text: "Данные"
+                on_press: app.root.switch_to("info")
+            NavButton:
+                text: "Инфо"
+                on_press: app.root.switch_to("about")
+
+<InfoScreen>:
+    FloatLayout:
+        Image:
+            source: "background.jpg"
+            fit_mode: "fill"
+        DarkOverlay:
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(15)
+            padding: dp(20)
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+
+            CustomLabel:
+                text: "Инфо о пользователе"
+                font_size: "28sp"
+
+            CustomLabel:
+                text: "Возраст"
+
+            CustomSpinner:
+                id: age_spinner
+                text: '17'
+                values: [str(i) for i in range(5, 100)]
+
+            CustomButton:
+                text: "Сохранить"
+                on_press: root.save_info()
+
+            CustomLabel:
+                id: info_label
+                text: ""
+                font_size: "16sp"
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            pos_hint: {'x': 0, 'y': 0}
+            spacing: dp(2)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            NavButton:
+                text: "Фокус"
+                on_press: app.root.switch_to("meditation")
+            NavButton:
+                text: "Сон"
+                on_press: app.root.switch_to("sleep")
+            NavButton:
+                text: "Отчёт"
+                on_press: app.root.switch_to("report")
+            NavButton:
+                text: "Данные"
+                on_press: app.root.switch_to("info")
+            NavButton:
+                text: "Инфо"
+                on_press: app.root.switch_to("about")
+
+<AboutScreen>:
+    FloatLayout:
+        Image:
+            source: "background.jpg"
+            fit_mode: "fill"
+        DarkOverlay:
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            spacing: dp(15)
+            size_hint: 0.9, 0.9
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+
+            CustomLabel:
+                text: "Фокус"
+                font_size: "32sp"
+
+            Image:
+                source: "logo.jpg"
+                size_hint: (0.99, 0.99)
+                allow_stretch: True
+                keep_ratio: True
+
+            CustomLabel:
+                text: "Контакт: @palebymoon"
+                font_size: "18sp"
+
+            Widget:
+
+            CustomLabel:
+                text: "© Дмитрий Шардаков, Кирилл Елисеев, Олег Жданов, 2025. Все права защищены."
+                font_size: "12sp"
+                halign: "center"
+                valign: "bottom"
+                text_size: self.width, None
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            pos_hint: {'x': 0, 'y': 0}
+            spacing: dp(2)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            NavButton:
+                text: "Фокус"
+                on_press: app.root.switch_to("meditation")
+            NavButton:
+                text: "Сон"
+                on_press: app.root.switch_to("sleep")
+            NavButton:
+                text: "Отчёт"
+                on_press: app.root.switch_to("report")
+            NavButton:
+                text: "Данные"
+                on_press: app.root.switch_to("info")
+            NavButton:
+                text: "Инфо"
+                on_press: app.root.switch_to("about")
